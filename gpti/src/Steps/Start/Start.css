@@ -1,0 +1,22 @@
+/* Estilos para el paso de bienvenida */
+.welcome-view {
+  text-align: center;
+  padding: 20px;
+}
+
+.start-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4a90e2;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.start-button:hover {
+  background-color: #3a7fcf;
+}

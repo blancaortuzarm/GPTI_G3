@@ -1,0 +1,32 @@
+/* Estilos para el paso de selección de sexo */
+.step-content {
+  margin: 0 auto;
+  max-width: 450px;
+}
+
+.view-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-option input {
+  margin-right: 8px;
+}

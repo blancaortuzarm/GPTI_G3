@@ -1,0 +1,30 @@
+/* Estilos para el paso de categoría de peso */
+.step-content {
+  margin: 0 auto;
+  max-width: 450px;
+}
+
+.view-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
