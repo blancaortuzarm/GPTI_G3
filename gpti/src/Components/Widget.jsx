@@ -25,8 +25,27 @@ const MultiStepForm = () => {
   const isLastFormStep = currentStep === totalSteps;
   const isResultStep = currentStep === totalSteps + 1;
 
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.deporte !== '';
+      case 2: 
+        return formData.sexo !== '';
+      case 3: 
+        return formData.peso !== '';
+      case 4: 
+        return formData.dieta !== '';
+      case 5:
+        return formData.comidas !== '' && formData.snacks !== '';
+      default:
+        return true;
+    }
+  };
+
   const handleNext = () => {
-    setCurrentStep(currentStep + 1);
+    if (isStepValid()) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   const handlePrevious = () => {

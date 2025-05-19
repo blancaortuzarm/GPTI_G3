@@ -1,39 +1,50 @@
 import React from 'react';
 import './Meals.css';
 
+const opcionesComidas = ['2', '3', '4', '5'];
+const opcionesSnacks = ['0', '1', '2', '3', '4'];
+
 const MealsStep = ({ formData, onChange }) => {
   return (
     <div className="step-content">
       <h2 className="view-title">Comidas y snacks</h2>
-      <div className="form-group">
-        <label>Número de comidas principales:</label>
-        <select
-          name="comidas"
-          value={formData.comidas}
-          onChange={onChange}
-          className="form-control"
-        >
-          <option value="2">2 comidas</option>
-          <option value="3">3 comidas</option>
-          <option value="4">4 comidas</option>
-          <option value="5">5 comidas</option>
-        </select>
+
+      <div className="meals-section">
+        <h3>¿Cuántas comidas principales haces al día?</h3>
+        <div className="opciones-grid">
+          {opcionesComidas.map((num) => (
+            <div
+              key={num}
+              className={`opcion-card ${
+                formData.comidas === num ? 'selected' : ''
+              }`}
+              onClick={() =>
+                onChange({ target: { name: 'comidas', value: num } })
+              }
+            >
+              {num} comidas
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Número de snacks:</label>
-        <select
-          name="snacks"
-          value={formData.snacks}
-          onChange={onChange}
-          className="form-control"
-        >
-          <option value="0">0 snacks</option>
-          <option value="1">1 snack</option>
-          <option value="2">2 snacks</option>
-          <option value="3">3 snacks</option>
-          <option value="4">4 snacks</option>
-        </select>
+      <div className="meals-section">
+        <h3>¿Cuántos snacks comes al día?</h3>
+        <div className="opciones-grid">
+          {opcionesSnacks.map((num) => (
+            <div
+              key={num}
+              className={`opcion-card ${
+                formData.snacks === num ? 'selected' : ''
+              }`}
+              onClick={() =>
+                onChange({ target: { name: 'snacks', value: num } })
+              }
+            >
+              {num} {num === '1' ? 'snack' : 'snacks'}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,31 +1,40 @@
-/* Estilos para el paso de resultados */
 .result-view {
   text-align: center;
+  padding: 2rem;
 }
 
-.view-title {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
-  text-align: center;
+.result-description {
+  margin-bottom: 2rem;
+  color: #555;
 }
 
-.view-description {
-  font-size: 16px;
-  color: #666;
-  text-align: center;
-  margin-bottom: 20px;
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.result-data {
-  background-color: white;
-  border-radius: 6px;
-  padding: 16px;
-  margin-top: 24px;
+.result-card {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--yellow);
   text-align: left;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s ease-in-out;
 }
 
-.result-data p {
-  margin: 8px 0;
+.result-card strong {
+  display: block;
+  color: black;
+  font-family: var( --font-family);
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.3rem;
+}
+
+.result-card span {
+  font-size: 1rem;
+  color: black;
+  font-weight: 500;
 }

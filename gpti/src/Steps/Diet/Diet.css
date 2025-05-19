@@ -1,53 +1,70 @@
 /* Estilos para el paso de dieta */
-.step-content {
-  margin: 0 auto;
-  max-width: 450px;
-}
-
-.view-title {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
-  text-align: center;
-}
-
-.form-group {
-  margin-bottom: 24px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #4a90e2;
-  outline: none;
-}
-
-.checkbox-group {
+.diet-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.checkbox-option {
+.diet-item {
+  background-color: #eee;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-family);
+  transition: background 0.3s;
 }
 
-.checkbox-option input {
-  margin-right: 8px;
+.diet-item:hover, .diet-item.selected {
+  background-color: var(--yellow);
+  color: black;
+}
+
+.diet-label {
+  font-size: 1rem;
+}
+
+.diet-check {
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.restricciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.restriccion-card {
+  width: 100px;
+  height: 100px;
+  background-color: #eee;
+  border-radius: 15px;
+  text-align: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.restriccion-card:hover, .restriccion-card.selected {
+  background-color: var(--yellow);
+  color: black;
+  transform: scale(1.05);
+}
+
+.restriccion-card img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-bottom: 0.3rem;
+}
+
+.restriccion-card p {
+  font-size: 0.85rem;
+  margin: 0;
 }
