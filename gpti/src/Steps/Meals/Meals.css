@@ -1,37 +1,39 @@
 /* Estilos para el paso de comidas y snacks */
-.step-content {
-  margin: 0 auto;
-  max-width: 450px;
+.meals-section {
+  margin: 2rem 0;
 }
 
-.view-title {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
+.meals-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
-.form-group {
-  margin-bottom: 24px;
+.opciones-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+.opcion-card {
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  font-family: var( --font-family);
+  font-size: 1rem;
+  font-weight: var(--font-weight-regular);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  min-width: 100px;
+  text-align: center;
 }
 
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #4a90e2;
-  outline: none;
+.opcion-card:hover, .opcion-card.selected {
+  background-color: var(--yellow);
+  color: black;
+  border-color: var(--yellow);
+  transform: scale(1.05);
 }

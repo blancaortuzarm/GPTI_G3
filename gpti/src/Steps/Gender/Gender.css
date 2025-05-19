@@ -1,32 +1,45 @@
 /* Estilos para el paso de selección de sexo */
-.step-content {
-  margin: 0 auto;
-  max-width: 450px;
+.gender-grid {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.view-title {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
+.gender-option {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #d1d1d1;
+  color: black;
   text-align: center;
-}
-
-.form-group {
-  margin-bottom: 24px;
-}
-
-.radio-group {
+  padding: 1rem 0.5rem;
+  font-weight: var(--font-weight-bold);
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s, border 0.3s;
+  border: 3px solid transparent;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.radio-option {
-  display: flex;
   align-items: center;
-  cursor: pointer;
+  justify-content: center;
 }
 
-.radio-option input {
-  margin-right: 8px;
+.gender-option img {
+  width: 60px;
+  object-fit: fill;
+  margin-bottom: 0.5rem;
+}
+
+.gender-option p {
+  margin: 0;
+  font-family: var( --font-family);
+  font-size: 1rem;
+  font-weight: var(--font-weight-regular);
+}
+
+.gender-option:hover, .gender-option.selected {
+  border-color: var(--yellow);
+  transform: scale(1.1);
 }

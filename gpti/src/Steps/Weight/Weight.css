@@ -1,30 +1,44 @@
 /* Estilos para el paso de categoría de peso */
-.step-content {
-  margin: 0 auto;
-  max-width: 450px;
+.peso-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.view-title {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
+.peso-card {
+  background-color: #eee;
+  border-radius: 15px;
+  padding: 1rem;
   text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  border: 2px solid transparent;
 }
 
-.form-group {
-  margin-bottom: 24px;
+.peso-card:hover, .peso-card.selected {
+  background-color: var(--yellow);
+  color: black;
+  border-color: var(--yellow);
+  transform: scale(1.05);
 }
 
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+.peso-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
 }
 
-.form-control:focus {
-  border-color: #4a90e2;
-  outline: none;
+.peso-nombre {
+  font-family: var( --font-family);
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.3rem;
+}
+
+.peso-desc {
+  font-size: 0.85rem;
+  margin: 0;
 }
