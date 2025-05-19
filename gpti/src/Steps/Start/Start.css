@@ -1,22 +1,52 @@
 /* Estilos para el paso de bienvenida */
 .welcome-view {
+  position: relative;
+  height: 85vh;
+  width: 100%;
+  background-image: url('../../assets/FoodImgs/matcha.jpeg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 1;
   text-align: center;
+  color: #ffffff;
   padding: 20px;
 }
 
-.start-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 4px;
-  background-color: #4a90e2;
-  color: white;
+.brand {
+  font-size: 2.5rem;
   font-weight: bold;
-  font-size: 16px;
+  margin: 0.5rem 0;
+}
+
+.description {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.start-button {
+  background-color: #7b61ff;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px;
+  transition: background 0.3s ease;
 }
 
 .start-button:hover {
-  background-color: #3a7fcf;
+  background-color: #5a45d0;
 }
