@@ -4,14 +4,18 @@ import boxingImg from '../../assets/SportImgs/boxing.svg'
 import judoImg from '../../assets/SportImgs/judo.svg'
 import wrestlingImg from '../../assets/SportImgs/wrestling.svg'
 import taekwondoImg from '../../assets/SportImgs/taekwondo.svg'
+import horseracingImg from '../../assets/SportImgs/horseracing.svg'
+import weightliftingImg from '../../assets/SportImgs/weightlifting.svg'
+import muaythaiImg from '../../assets/SportImgs/muaythai.svg'
 
 const deportes = [
   { id: 'boxing', nombre: 'Boxing', img: boxingImg},
   { id: 'judo', nombre: 'Judo', img: judoImg },
   { id: 'wrestling', nombre: 'Lucha', img: wrestlingImg },
   { id: 'taekwondo', nombre: 'Taekwondo', img: taekwondoImg },
-  { id: 'running', nombre: 'Running', img: '/images/running.jpg' },
-  { id: 'crossfit', nombre: 'CrossFit', img: '/images/crossfit.jpg' }
+  { id: 'horseracing', nombre: 'Turf (Horse Racing)', img: horseracingImg },
+  { id: 'weightlifting', nombre: 'Halterofilia', img: weightliftingImg },
+  { id: 'muaythai', nombre: 'Muay Thai', img: muaythaiImg },
 ];
 
 const SportStep = ({ formData, onChange }) => {
@@ -30,7 +34,9 @@ const SportStep = ({ formData, onChange }) => {
               onChange({ target: { name: 'deporte', value: deporte.id } })
             }
           >
-            <img src={deporte.img} alt={deporte.nombre} />
+            <div className="image-container">
+              <img src={deporte.img} alt={deporte.nombre} />
+            </div>
             <p>{deporte.nombre}</p>
           </div>
         ))}

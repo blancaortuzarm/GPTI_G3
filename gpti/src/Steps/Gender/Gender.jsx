@@ -23,7 +23,9 @@ const GenderStep = ({ formData, onChange }) => {
               onChange({ target: { name: 'sexo', value: genero.id } })
             }
           >
-            <img src={genero.img} alt={genero.nombre} />
+            <div className="image-container">
+              <img src={genero.img} alt={genero.nombre} />
+            </div>            
             <p>{genero.nombre}</p>
           </div>
         ))}

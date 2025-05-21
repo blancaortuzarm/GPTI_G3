@@ -1,42 +1,76 @@
 /* Estilos para el paso de selección de deporte */
 .sports-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  row-gap: 3rem;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 2rem 1rem;
+  padding: 1rem;
+  width: 100%;
   justify-items: center;
 }
 
+.sport-option:nth-child(1) { grid-column: span 2 / span 2; }
+.sport-option:nth-child(2) { grid-column: 3 / span 2; }
+.sport-option:nth-child(3) { grid-column: 5 / span 2; }
+.sport-option:nth-child(4) { grid-column: 7 / span 2; }
+
+/* Segunda fila - 3 elementos centrados */
+.sport-option:nth-child(5) { 
+  grid-column: 2 / span 2;
+  grid-row: 2;
+}
+.sport-option:nth-child(6) { 
+  grid-column: 4 / span 2;
+  grid-row: 2;
+}
+.sport-option:nth-child(7) { 
+  grid-column: 6 / span 2;
+  grid-row: 2;
+}
+
 .sport-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 15px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  padding: 1em;
+}
+
+.sport-option .image-container {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   background-color: #d1d1d1;
-  color: black;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family);
-  text-align: center;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: transform 0.3s, border 0.3s;
-  border: 3px solid transparent;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 3px solid transparent;
+  transition: transform 0.3s, border 0.3s;
+}
+
+.sport-option:hover {
+  background-color: var(--light-yellow);
+  transform: scale(1.1);
+}
+
+.sport-option.selected{
+  background-color: var(--yellow);
+  transform: scale(1.1);
 }
 
 .sport-option img {
   width: 75px;
-  object-fit: fill;
+  object-fit: contain;
 }
 
 .sport-option p {
   margin: 0;
   font-size: 0.9rem;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semi-bold);
+  text-align: center;
 }
 
-.sport-option:hover, .sport-option.selected {
-  border-color: var(--yellow);
-  transform: scale(1.1);
-}

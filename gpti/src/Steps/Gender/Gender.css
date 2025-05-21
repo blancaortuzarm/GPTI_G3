@@ -2,44 +2,52 @@
 .gender-grid {
   display: flex;
   justify-content: center;
-  gap: 5rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .gender-option {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background-color: #d1d1d1;
-  color: black;
-  text-align: center;
-  padding: 1rem 0.5rem;
-  font-weight: var(--font-weight-bold);
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: transform 0.3s, border 0.3s;
-  border: 3px solid transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
+  border-radius: 15px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  padding: 1em;
+}
+
+.gender-option .image-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #d1d1d1;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  border: 3px solid transparent;
+  transition: transform 0.3s, border 0.3s;
+}
+
+.gender-option:hover {
+  background-color: var(--light-yellow);
+  transform: scale(1.1);
+}
+
+.gender-option.selected {
+  background-color: var(--yellow);
+  transform: scale(1.1);
 }
 
 .gender-option img {
-  width: 60px;
-  object-fit: fill;
-  margin-bottom: 0.5rem;
+  width: 75px;
+  object-fit: contain;
 }
 
 .gender-option p {
   margin: 0;
-  font-family: var( --font-family);
-  font-size: 1rem;
-  font-weight: var(--font-weight-regular);
-}
-
-.gender-option:hover, .gender-option.selected {
-  border-color: var(--yellow);
-  transform: scale(1.1);
+  font-size: 0.9rem;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semi-bold);
+  text-align: center;
 }
