@@ -37,16 +37,35 @@
 }
 
 .start-button {
-  background-color: var(--yellow);
-  color: white;
-  border: none;
-  padding: 12px 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-width: 64px;
+  min-height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
   font-size: 1rem;
-  border-radius: 25px;
+  font-family: inherit;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  outline: none;
+  border: none;
+  background: var(--yellow, #FFD600);
+  color: #222;
+  box-shadow: 0px 1.5px 4px rgba(60, 64, 67, 0.08);
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+  user-select: none;
 }
 
-.start-button:hover {
-  background-color: var(--yellow-2);
+.start-button:hover,
+.start-button:focus-visible {
+  background: var(--yellow-2, #FFB300);
+  color: #222;
+  box-shadow: 0px 4px 12px rgba(60, 64, 67, 0.18);
+  transform: translateY(-2px) scale(1.03);
 }
