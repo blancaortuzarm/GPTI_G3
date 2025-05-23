@@ -4,14 +4,14 @@ import boxingImg from '../../assets/SportImgs/boxing.svg'
 import judoImg from '../../assets/SportImgs/judo.svg'
 import wrestlingImg from '../../assets/SportImgs/wrestling.svg'
 import taekwondoImg from '../../assets/SportImgs/taekwondo.svg'
+import muaythaiImg from '../../assets/SportImgs/weightlifting.svg'
 
 const deportes = [
   { id: 'boxing', nombre: 'Boxing', img: boxingImg},
   { id: 'judo', nombre: 'Judo', img: judoImg },
   { id: 'wrestling', nombre: 'Lucha', img: wrestlingImg },
   { id: 'taekwondo', nombre: 'Taekwondo', img: taekwondoImg },
-  { id: 'running', nombre: 'Running', img: '/images/running.jpg' },
-  { id: 'crossfit', nombre: 'CrossFit', img: '/images/crossfit.jpg' }
+  { id: 'weightlifting', nombre: 'Halterofilia', img: muaythaiImg },
 ];
 
 const SportStep = ({ formData, onChange }) => {
