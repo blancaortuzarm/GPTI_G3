@@ -11,18 +11,39 @@ const MealsStep = ({ formData, onChange }) => {
 
       <div className="meals-section">
         <h3>¿Cuántas comidas principales haces al día?</h3>
-        <div className="opciones-grid">
+        <div className="meal-grid">
           {opcionesComidas.map((num) => (
             <div
               key={num}
-              className={`opcion-card ${
+              className={`meal-card ${
                 formData.comidas === num ? 'selected' : ''
               }`}
               onClick={() =>
                 onChange({ target: { name: 'comidas', value: num } })
               }
+              tabIndex={0}
+              role="button"
+              aria-pressed={formData.comidas === num}
             >
-              {num} comidas
+              <div className="meal-name-container">
+                <div className="meal-name">{num}</div>
+                {formData.comidas === num && (
+                  <span className="meal-check">
+                    <svg width="28" height="28" viewBox="0 0 28 28">
+                      <circle cx="14" cy="14" r="14" fill="#fff" />
+                      <path 
+                        d="M10 14l3 3 5-5" 
+                        stroke="#ffb612" 
+                        strokeWidth="2.2" 
+                        fill="none" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                      />
+                    </svg>
+                  </span>
+                )}
+              </div>
+
             </div>
           ))}
         </div>
@@ -30,18 +51,39 @@ const MealsStep = ({ formData, onChange }) => {
 
       <div className="meals-section">
         <h3>¿Cuántos snacks comes al día?</h3>
-        <div className="opciones-grid">
+        <div className="meal-grid">
           {opcionesSnacks.map((num) => (
             <div
               key={num}
-              className={`opcion-card ${
+              className={`meal-card ${
                 formData.snacks === num ? 'selected' : ''
               }`}
               onClick={() =>
                 onChange({ target: { name: 'snacks', value: num } })
               }
+              tabIndex={0}
+              role="button"
+              aria-pressed={formData.snacks === num}
             >
-              {num} {num === '1' ? 'snack' : 'snacks'}
+              <div className="meal-name-container">
+                <div className="meal-name">{num}</div>
+                {formData.snacks === num && (
+                  <span className="meal-check">
+                    <svg width="28" height="28" viewBox="0 0 28 28">
+                      <circle cx="14" cy="14" r="14" fill="#fff" />
+                      <path 
+                        d="M10 14l3 3 5-5" 
+                        stroke="#ffb612" 
+                        strokeWidth="2.2" 
+                        fill="none" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                      />
+                    </svg>
+                  </span>
+                )}
+              </div>
+
             </div>
           ))}
         </div>

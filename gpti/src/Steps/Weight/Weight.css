@@ -1,73 +1,103 @@
-.peso-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1.5rem;
-  justify-items: center;
-}
 
 .peso-card {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0px 1.5px 4px rgba(60, 64, 67, 0.1), 0px 1.5px 6px rgba(60, 64, 67, 0.08);
-  padding: 1.5rem 1rem 2rem;
-  width: 100%;
-  max-width: 180px;
-  cursor: pointer;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(60, 64, 67, 0.12);
+  min-height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  transition: box-shadow 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
   user-select: none;
+  padding-bottom: 1rem;
+  outline: none;
+  position: relative;
+  border: 2px solid transparent;
 }
 
-/* Número o rango grande y negrita */
-.peso-nombre {
-  font-family: var(--font-family);
-  font-weight: 700; /* negrita fuerte */
-  font-size: 2.5rem; /* tamaño grande */
-  color: #222;
-  margin: 0;
-  text-align: center;
-  user-select: none;
-}
-
-/* Descripción secundaria más pequeña y clara */
-.peso-desc {
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 1rem;
-  color: #555;
-  margin: 0;
-  text-align: center;
-}
-
-/* Hover y seleccionado igual que antes */
 .peso-card:hover {
-  box-shadow: 0px 4px 12px rgba(60, 64, 67, 0.18), 0px 6px 24px rgba(60, 64, 67, 0.12);
-  background-color: #fffde7;
-  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(60, 64, 67, 0.24);
+  transform: translateY(-3px) scale(1.04);
+  border-color: transparent;
 }
 
 .peso-card.selected {
-  background-color: #fffde7;
-  box-shadow: 0px 4px 12px rgba(255, 193, 7, 0.25), 0px 6px 24px rgba(255, 193, 7, 0.12);
-  border: 2px solid var(--yellow, #FFD600);
+  box-shadow: 0 10px 32px rgba(60, 64, 67, 0.28);
+  border-color: var(--yellow, #FFD600);
   transform: scale(1.05);
 }
 
-/* Responsive para móviles */
-@media (max-width: 400px) {
-  .peso-card {
-    max-width: 140px;
-    padding: 1rem 0.8rem 1.5rem;
-  }
+.peso-value-container {
+  width: 100%;
+  height: fit-content;
+  padding: 1rem 1rem;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;;
+}
 
-  .peso-nombre {
-    font-size: 2rem;
-  }
+.peso-value {
+  font-family: var(--font-family);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+}
 
-  .peso-desc {
-    font-size: 0.9rem;
-  }
+.peso-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.peso-unit {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+  padding-bottom: 0.35em;
+}
+
+.peso-card-content {
+  width: 100%;
+  padding: 0rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  align-items: center;
+}
+
+.peso-title {
+  font-family: var(--font-family);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+  line-height: 1.2;
+  margin: 0;
+  width: 100%;
+}
+
+.peso-desc {
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: left;
+  width: 100%;
+}
+
+.peso-card.selected .peso-check {
+  opacity: 1;
+  transform: scale(1.1);
 }
