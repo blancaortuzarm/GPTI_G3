@@ -14,7 +14,6 @@
 
 /* Contenedor de la barra de progreso */
 .progress-container {
-  margin-bottom: 5px;
   padding: 20px 10px;
 }
 
@@ -110,47 +109,91 @@
   margin-top: 20px;
 }
 
-.prev-button,
-.next-button,
-.submit-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
+.prev-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-width: 64px;
+  min-height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-family: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  outline: none;
+  border: 1.5px solid #bbb;
+  background: transparent;
+  color: #222;
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+  user-select: none;
+  box-shadow: none;
 }
 
-.prev-button {
-  background-color: #d8d6d6;
-  color: #525252;
+.prev-button:hover,
+.prev-button:focus-visible {
+  background: #f8f8f8;
+  border-color: var(--yellow, #FFD600);
+  color: #222;
+  transform: translateY(-2px) scale(1.03);
 }
 
-.prev-button:hover {
-  background-color: #b8b7b7;
-  transform: translateY(-2px);
-}
-
-.next-button {
-  background-color: var(--yellow);
-  color: white;
-}
-
-.next-button:hover {
-  background-color: var(--yellow-2);
-  transform: translateY(-2px);
-}
-
+.next-button,
 .submit-button {
-  background-color: var(--yellow);
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-width: 64px;
+  min-height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: var(--yellow, #FFD600);
+  color: #222;
+  box-shadow: 0px 1.5px 4px 0px rgba(60,64,67,0.08);
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+  user-select: none;
 }
 
-.submit-button:hover {
-  background-color: var(--yellow-2);
-  transform: translateY(-2px);
+.next-button:hover,
+.next-button:focus-visible,
+.submit-button:hover,
+.submit-button:focus-visible {
+  background: var(--yellow-2, #FFB300);
+  color: #222;
+  box-shadow: 0px 4px 12px 0px rgba(60,64,67,0.18);
+  transform: translateY(-2px) scale(1.03);
 }
+
+.prev-button:disabled,
+.prev-button[disabled],
+.next-button:disabled,
+.next-button[disabled],
+.submit-button:disabled,
+.submit-button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+  box-shadow: none;
+  background: #eee;
+  color: #aaa;
+}
+
 
 /* Estilos para inputs y selects comunes */
 .form-input,
