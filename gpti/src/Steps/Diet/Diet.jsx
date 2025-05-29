@@ -2,7 +2,7 @@ import React from 'react';
 import './Diet.css';
 import eggsIcon from '../../assets/FoodImgs/eggs.svg';
 import fishIcon from '../../assets/FoodImgs/fish.svg';
-import glutenIcon from '../../assets/FoodImgs/gluten.svg';
+import glutenIcon from '../../assets/FoodImgs/glutten.svg';
 import milkIcon from '../../assets/FoodImgs/milk.svg';
 import peanutIcon from '../../assets/FoodImgs/peanut.svg';
 import shellfishIcon from '../../assets/FoodImgs/seafood.svg';
