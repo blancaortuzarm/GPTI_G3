@@ -90,3 +90,63 @@
   opacity: 1;
   transform: scale(1.1);
 }
+
+/* Estilos para la entrada de peso en modo edición */
+.weight-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.weight-input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 150px;
+}
+
+.weight-input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  font-size: 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--card-radius);
+  text-align: center;
+  transition: border-color 0.3s;
+}
+
+.weight-input:focus {
+  outline: none;
+  border-color: var(--yellow);
+}
+
+.weight-unit {
+  position: absolute;
+  right: 15px;
+  font-size: 1rem;
+  color: #757575;
+}
+
+.weight-tips {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1.5rem;
+  background-color: rgba(255, 182, 18, 0.05);
+  border-radius: var(--card-radius);
+  margin-top: 2rem;
+}
+
+.weight-tips h3 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.weight-tips p {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+

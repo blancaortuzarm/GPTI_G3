@@ -153,12 +153,12 @@ const WeightStep = ({ formData, onChange }) => {
     }
   }
 
-  if (categoriasPesoPorDeporte[deporte].length === 0) {
+  if (!categorias || categorias.length === 0) {
     categorias = [
-      { id: 'ligero', nombre: 'Ligero', descripcion: 'menos de 60kg', icon: ligeroIcon },
-      { id: 'medio', nombre: 'Medio', descripcion: '60–75kg', icon: medioIcon },
-      { id: 'pesado', nombre: 'Pesado', descripcion: '75–90kg', icon: pesadoIcon },
-      { id: 'super_pesado', nombre: 'Súper pesado', descripcion: 'más de 90kg', icon: superPesadoIcon }
+      { id: 'ligero', valor: 'Ligero', descripcion: 'menos de 60kg', icon: ligeroIcon },
+      { id: 'medio', valor: 'Medio', descripcion: '60–75kg', icon: medioIcon },
+      { id: 'pesado', valor: 'Pesado', descripcion: '75–90kg', icon: pesadoIcon },
+      { id: 'super_pesado', valor: 'Súper pesado', descripcion: 'más de 90kg', icon: superPesadoIcon }
     ];
   }
 

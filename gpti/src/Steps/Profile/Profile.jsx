@@ -1,0 +1,644 @@
+import React, { useState } from 'react';
+import './Profile.css';
+import SportStep from '../Sport/Sport';
+import GenderStep from '../Gender/Gender';
+import WeightStep from '../Weight/Weight';
+import DietStep from '../Diet/Diet';
+import MealsStep from '../Meals/Meals';
+import CreatePlanStep from '../Plans/CreatePlan';
+import ViewPlanStep from '../Plans/ViewPlan';
+
+const categoriasPesoPorDeporte = {
+  muaythai: {
+    all: [
+      { id: 'miniflyweight', valor: '47.6', unidad: 'kg', descripcion: 'Miniflyweight' },
+      { id: 'jr_flyweight', valor: '49.0', unidad: 'kg', descripcion: 'Jr. Flyweight' },
+      { id: 'flyweight', valor: '50.8', unidad: 'kg', descripcion: 'Flyweight' },
+      { id: 'jr_bantamweight', valor: '52.2', unidad: 'kg', descripcion: 'Jr. Bantamweight' },
+      { id: 'bantamweight', valor: '53.5', unidad: 'kg', descripcion: 'Bantamweight' },
+      { id: 'jr_featherweight', valor: '55.3', unidad: 'kg', descripcion: 'Jr. Featherweight' },
+      { id: 'featherweight', valor: '57.2', unidad: 'kg', descripcion: 'Featherweight' },
+      { id: 'jr_lightweight', valor: '59.0', unidad: 'kg', descripcion: 'Jr. Lightweight' },
+      { id: 'lightweight', valor: '61.2', unidad: 'kg', descripcion: 'Lightweight' },
+      { id: 'jr_welterweight', valor: '63.5', unidad: 'kg', descripcion: 'Jr. Welterweight' },
+      { id: 'welterweight', valor: '66.7', unidad: 'kg', descripcion: 'Welterweight' },
+      { id: 'jr_middleweight', valor: '69.9', unidad: 'kg', descripcion: 'Jr. Middleweight' },
+      { id: 'middleweight', valor: '72.6', unidad: 'kg', descripcion: 'Middleweight' },
+      { id: 'super_middleweight', valor: '76.2', unidad: 'kg', descripcion: 'Super Middleweight' },
+      { id: 'light_heavyweight', valor: '79.4', unidad: 'kg', descripcion: 'Light Heavyweight' },
+      { id: 'cruiserweight', valor: '90.7', unidad: 'kg', descripcion: 'Cruiserweight' },
+      { id: 'heavyweight', valor: '> 90.7', unidad: 'kg', descripcion: 'Heavyweight' },
+    ],
+  },
+
+  judo: {
+    male: [
+      { id: '60kg', valor: '< 60', unidad: 'kg', descripcion: '' },
+      { id: '66kg', valor: '< 66', unidad: 'kg', descripcion: '' },
+      { id: '73kg', valor: '< 73', unidad: 'kg', descripcion: '' },
+      { id: '81kg', valor: '< 81', unidad: 'kg', descripcion: '' },
+      { id: '90kg', valor: '< 90', unidad: 'kg', descripcion: '' },
+      { id: '100kg', valor: '< 100', unidad: 'kg', descripcion: '' },
+      { id: 'plus100kg', valor: '> 100', unidad: 'kg', descripcion: '' },
+    ],
+    female: [
+      { id: '48kg', valor: '< 48', unidad: 'kg', descripcion: '' },
+      { id: '52kg', valor: '< 52', unidad: 'kg', descripcion: '' },
+      { id: '57kg', valor: '< 57', unidad: 'kg', descripcion: '' },
+      { id: '63kg', valor: '< 63', unidad: 'kg', descripcion: '' },
+      { id: '70kg', valor: '< 70', unidad: 'kg', descripcion: '' },
+      { id: '78kg', valor: '< 78', unidad: 'kg', descripcion: '' },
+      { id: 'plus78kg', valor: '> 78', unidad: 'kg', descripcion: '' },
+    ],
+  },
+
+  taekwondo: {
+    male: [
+      { id: 'flyweight', valor: '58', unidad: 'kg', descripcion: 'Flyweight' },
+      { id: 'featherweight', valor: '68', unidad: 'kg', descripcion: 'Featherweight' },
+      { id: 'welterweight', valor: '80', unidad: 'kg', descripcion: 'Welterweight' },
+      { id: 'heavyweight', valor: '> 80', unidad: 'kg', descripcion: 'Heavyweight' },
+    ],
+    female: [
+      { id: 'flyweight', valor: '49', unidad: 'kg', descripcion: 'Flyweight' },
+      { id: 'featherweight', valor: '57', unidad: 'kg', descripcion: 'Featherweight' },
+      { id: 'welterweight', valor: '67', unidad: 'kg', descripcion: 'Welterweight' },
+      { id: 'heavyweight', valor: '> 67', unidad: 'kg', descripcion: 'Heavyweight' },
+    ],
+  },
+
+  wrestling: {
+    male: [
+      { id: '57kg', valor: '57', unidad: 'kg', descripcion: '' },
+      { id: '65kg', valor: '65', unidad: 'kg', descripcion: '' },
+      { id: '74kg', valor: '74', unidad: 'kg', descripcion: '' },
+      { id: '86kg', valor: '86', unidad: 'kg', descripcion: '' },
+      { id: '97kg', valor: '97', unidad: 'kg', descripcion: '' },
+      { id: '125kg', valor: '125', unidad: 'kg', descripcion: '' },
+    ],
+    female: [
+      { id: '50kg', valor: '50', unidad: 'kg', descripcion: '' },
+      { id: '53kg', valor: '53', unidad: 'kg', descripcion: '' },
+      { id: '57kg', valor: '57', unidad: 'kg', descripcion: '' },
+      { id: '62kg', valor: '62', unidad: 'kg', descripcion: '' },
+      { id: '68kg', valor: '68', unidad: 'kg', descripcion: '' },
+      { id: '76kg', valor: '76', unidad: 'kg', descripcion: '' },
+    ],
+  },
+
+  weightlifting: {
+    male: [
+      { id: '61kg', valor: '61', unidad: 'kg', descripcion: '' },
+      { id: '73kg', valor: '73', unidad: 'kg', descripcion: '' },
+      { id: '89kg', valor: '89', unidad: 'kg', descripcion: '' },
+      { id: '102kg', valor: '102', unidad: 'kg', descripcion: '' },
+      { id: 'plus102kg', valor: '> 102', unidad: 'kg', descripcion: '' },
+    ],
+    female: [
+      { id: '49kg', valor: '49', unidad: 'kg', descripcion: '' },
+      { id: '59kg', valor: '59', unidad: 'kg', descripcion: '' },
+      { id: '71kg', valor: '71', unidad: 'kg', descripcion: '' },
+      { id: '81kg', valor: '81', unidad: 'kg', descripcion: '' },
+      { id: 'plus81kg', valor: '> 81', unidad: 'kg', descripcion: '' },
+    ],
+  },
+
+  boxing: {
+    male: [
+      { id: 'flyweight', valor: '52', unidad: 'kg', descripcion: 'Flyweight' },
+      { id: 'featherweight', valor: '57', unidad: 'kg', descripcion: 'Featherweight' },
+      { id: 'lightweight', valor: '63', unidad: 'kg', descripcion: 'Lightweight' },
+      { id: 'welterweight', valor: '69', unidad: 'kg', descripcion: 'Welterweight' },
+      { id: 'middleweight', valor: '75', unidad: 'kg', descripcion: 'Middleweight' },
+      { id: 'light_heavyweight', valor: '81', unidad: 'kg', descripcion: 'Light Heavyweight' },
+      { id: 'heavyweight', valor: '91', unidad: 'kg', descripcion: 'Heavyweight' },
+      { id: 'super_heavyweight', valor: '> 91', unidad: 'kg', descripcion: 'Super Heavyweight' },
+    ],
+    female: [
+      { id: 'flyweight', valor: '≤ 48', unidad: 'kg', descripcion: 'Flyweight' },
+      { id: 'bantamweight', valor: '51', unidad: 'kg', descripcion: 'Bantamweight' },
+      { id: 'featherweight', valor: '54', unidad: 'kg', descripcion: 'Featherweight' },
+      { id: 'lightweight', valor: '57', unidad: 'kg', descripcion: 'Lightweight' },
+      { id: 'light_welterweight', valor: '60', unidad: 'kg', descripcion: 'Light Welterweight' },
+      { id: 'welterweight', valor: '64', unidad: 'kg', descripcion: 'Welterweight' },
+      { id: 'middleweight', valor: '69', unidad: 'kg', descripcion: 'Middleweight' },
+      { id: 'light_heavyweight', valor: '75', unidad: 'kg', descripcion: 'Light Heavyweight' },
+      { id: 'heavyweight', valor: '81', unidad: 'kg', descripcion: 'Heavyweight' },
+      { id: 'super_heavyweight', valor: '> 81', unidad: 'kg', descripcion: 'Super Heavyweight' },
+    ],
+  },
+
+  horseracing: {
+    all: [
+      { id: 'lightweight', valor: '≤ 72.9', unidad: 'kg', descripcion: 'Lightweight' },
+      { id: 'middleweight', valor: '73 - 90.9', unidad: 'kg', descripcion: 'Middleweight' },
+      { id: 'heavyweight', valor: '> 91', unidad: 'kg', descripcion: 'Heavyweight' },
+      { id: 'junior', valor: '≤ 17', unidad: 'años', descripcion: 'Junior' },
+    ]
+  }
+};
+
+function isPesoCategoriaValida({ deporte, sexo, peso }) {
+  if (!deporte || !peso) return true;
+  const catDeporte = categoriasPesoPorDeporte[deporte];
+  if (!catDeporte) return true;
+  const sexoNorm = (sexo || '').toLowerCase();
+
+  let categorias = [];
+  if (catDeporte.all) {
+    categorias = catDeporte.all;
+  } else if (['male', 'hombre', 'masculino'].includes(sexoNorm)) {
+    categorias = catDeporte.male || [];
+  } else if (['female', 'mujer', 'femenino'].includes(sexoNorm)) {
+    categorias = catDeporte.female || [];
+  }
+  return categorias.some(cat => cat.id === peso);
+}
+
+const ProfileStep = ({ formData, onUpdate, onContinue }) => {
+  
+
+  const [editingField, setEditingField] = useState(null);
+  const [popupStep, setPopupStep] = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
+  const [currentView, setCurrentView] = useState('profile'); // 'profile', 'createPlan', 'viewPlan'
+  const [editedData, setEditedData] = useState({});
+  const [errors, setErrors] = useState({
+    nombre: '',
+    edad: '',
+    email: ''
+  });
+
+  // Simulamos si el plan existe o no
+  // En una implementación real, esto vendría de props o API
+  const planExists = Boolean(formData.planCreated);
+  const planModified = hasProfileChanged(formData);
+
+  // Función para determinar si el perfil ha sido modificado
+  function hasProfileChanged(currentData) {
+    // Aquí implementa la lógica para comparar el estado actual con el estado inicial
+    // Por ahora simplemente devolvemos true para demostración
+    return true;
+  }
+
+  // Datos hardcodeados para campos vacíos
+  const defaultData = {
+    nombre: 'Usuario Demo',
+    edad: '30',
+    email: 'usuario@ejemplo.com',
+    peso: '69.9',
+    sexo: 'male',
+    deporte: 'muaythai',
+    dieta: 'omnivora',
+    comidas: 3,
+    snacks: 2,
+    restricciones: ['sin_gluten']
+  };
+
+  // Combinamos datos reales con defaults para campos vacíos
+  const displayData = Object.fromEntries(
+    Object.entries(defaultData).map(([key, defaultValue]) => {
+      const userValue = formData[key];
+      return [key, userValue || defaultValue];
+    })
+  );
+
+  const categoriaValida = isPesoCategoriaValida(displayData);
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    setEditedData({
+      ...editedData,
+      [name]: value
+    });
+    
+    // Limpiar error al editar
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
+  };
+
+  const validate = (field) => {
+    let valid = true;
+    const newErrors = { ...errors };
+    
+    if (field === 'nombre') {
+      if (!editedData.nombre) {
+        newErrors.nombre = 'El nombre es obligatorio';
+        valid = false;
+      } else {
+        newErrors.nombre = '';
+      }
+    }
+    
+    if (field === 'edad') {
+      if (!editedData.edad) {
+        newErrors.edad = 'La edad es obligatoria';
+        valid = false;
+      } else {
+        const edadNum = parseInt(editedData.edad);
+        if (isNaN(edadNum) || edadNum < 14) {
+          newErrors.edad = 'Debes tener al menos 14 años';
+          valid = false;
+        } else {
+          newErrors.edad = '';
+        }
+      }
+    }
+    
+    if (field === 'email') {
+      if (!editedData.email) {
+        newErrors.email = 'El correo es obligatorio';
+        valid = false;
+      } else if (!/\S+@\S+\.\S+/.test(editedData.email)) {
+        newErrors.email = 'El formato del correo es inválido';
+        valid = false;
+      } else {
+        newErrors.email = '';
+      }
+    }
+    
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleEditField = (field) => {
+    // Para campos básicos, edición inline
+    if (['nombre', 'edad', 'email'].includes(field)) {
+      setEditingField(field);
+      setEditedData({
+        [field]: displayData[field]
+      });
+    } else {
+      // Para otros campos, abrimos el Step correspondiente
+      switch (field) {
+        case 'deporte':
+          setPopupStep('sport');
+          break;
+        case 'sexo':
+          setPopupStep('gender');
+          break;
+        case 'peso':
+          setPopupStep('weight');
+          break;
+        case 'dieta':
+          setPopupStep('diet');
+          setEditTarget('dieta');
+          break;
+        case 'restricciones':
+          setPopupStep('diet');
+          setEditTarget('restricciones');
+          break;
+        case 'comidas':
+          setPopupStep('meals');
+          setEditTarget('comidas');
+          break;
+        case 'snacks':
+          setPopupStep('meals');
+          setEditTarget('snacks');
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleSaveField = (field) => {
+    if (validate(field)) {
+      onUpdate({
+        ...formData,
+        ...editedData
+      });
+      setEditingField(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingField(null);
+    setErrors({
+      nombre: '',
+      edad: '',
+      email: ''
+    });
+  };
+
+  const handleStepChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    if (type === 'checkbox') {
+      if (checked) {
+        onUpdate({
+          ...formData,
+          [name]: [...(formData[name] || []), value]
+        });
+      } else {
+        onUpdate({
+          ...formData,
+          [name]: (formData[name] || []).filter(item => item !== value)
+        });
+      }
+    } else {
+      onUpdate({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+
+  // Manejador específico para la selección de dieta
+  const handleDietSelect = (dietId) => {
+    onUpdate({
+      ...formData,
+      dieta: dietId
+    });
+  };
+
+  // Manejador específico para restricciones alimentarias
+  const handleRestriccionToggle = (restriccionId) => {
+    const restricciones = [...(formData.restricciones || [])];
+    const index = restricciones.indexOf(restriccionId);
+    
+    if (index === -1) {
+      restricciones.push(restriccionId);
+    } else {
+      restricciones.splice(index, 1);
+    }
+    
+    onUpdate({
+      ...formData,
+      restricciones
+    });
+  };
+
+  const closePopup = () => {
+    setPopupStep(null);
+    setEditTarget(null);
+  };
+
+  const handleCreatePlan = () => {
+    setCurrentView('createPlan');
+  };
+
+  const handleUpdatePlan = () => {
+    // Actualizamos el plan y luego lo mostramos
+    // En una implementación real, aquí iría la llamada a la API
+    onUpdate({
+      ...formData,
+      planCreated: true // Marcamos que el usuario ya tiene un plan
+    });
+    setCurrentView('viewPlan');
+  };
+
+  const handleViewPlan = () => {
+    setCurrentView('viewPlan');
+  };
+
+  const handleBackToProfile = () => {
+    setCurrentView('profile');
+  };
+
+  const renderEditableField = (field, label, type = 'text') => {
+    return (
+      <div className="info-row">
+        <span className="info-label">{label}:</span>
+        {editingField === field ? (
+          <div className="edit-field-container">
+            <input
+              type={type}
+              name={field}
+              value={editedData[field] || ''}
+              onChange={handleChange}
+              className={errors[field] ? 'error' : ''}
+              min={type === 'number' ? (field === 'edad' ? '14' : '1') : undefined}
+            />
+            {errors[field] && <span className="error-text">{errors[field]}</span>}
+            <div className="edit-actions">
+              <button 
+                type="button" 
+                className="save-field-button" 
+                onClick={() => handleSaveField(field)}
+              >
+                <i className="fas fa-check"></i>
+              </button>
+              <button 
+                type="button" 
+                className="cancel-field-button" 
+                onClick={handleCancelEdit}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="value-with-edit">
+            <span className="info-value">{displayData[field] || 'No especificado'}</span>
+            <button 
+              className="edit-field-button" 
+              onClick={() => handleEditField(field)}
+              aria-label={`Editar ${label}`}
+            >
+              <i className="fas fa-pencil-alt"></i>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderReadOnlyField = (field, label, suffix = '') => {
+    let displayValue = displayData[field];
+    
+    // Si es la dieta, mostramos el nombre legible
+    if (field === 'dieta') {
+      const dietaEncontrada = tiposDieta.find(d => d.id === displayValue);
+      displayValue = dietaEncontrada ? dietaEncontrada.nombre : displayValue;
+    }
+    
+    // Formatear arrays (para restricciones)
+    if (Array.isArray(displayValue) && displayValue.length > 0) {
+      // Convertir IDs de restricciones a nombres legibles
+      if (field === 'restricciones') {
+        const restriccionesNombres = displayValue.map(id => {
+          const restriccionEncontrada = restricciones.find(r => r.id === id);
+          return restriccionEncontrada ? restriccionEncontrada.nombre : id;
+        });
+        displayValue = restriccionesNombres.join(', ');
+      } else {
+        displayValue = displayValue.join(', ');
+      }
+    } else if (Array.isArray(displayValue) && displayValue.length === 0) {
+      displayValue = 'Ninguna';
+    }
+    
+    // Añadir sufijo si existe
+    if (displayValue && suffix) {
+      displayValue = `${displayValue} ${suffix}`;
+    }
+    
+    return (
+      <div className="info-row">
+        <span className="info-label">{label}:</span>
+        <div className="value-with-edit">
+          <span className="info-value">{displayValue || 'No especificado'}</span>
+          <button 
+            className="edit-field-button" 
+            onClick={() => handleEditField(field)}
+            aria-label={`Editar ${label}`}
+          >
+            <i className="fas fa-pencil-alt"></i>
+          </button>
+        </div>
+      </div>
+    );
+  };
+  
+  // Listas para nombres legibles
+  const tiposDieta = [
+    { id: 'omnivora', nombre: 'Omnívora' },
+    { id: 'vegetariana', nombre: 'Vegetariana' },
+    { id: 'vegana', nombre: 'Vegana' },
+    { id: 'keto', nombre: 'Keto' },
+    { id: 'paleo', nombre: 'Paleo' }
+  ];
+
+  const restricciones = [
+    { id: 'sin_huevos', nombre: 'Sin huevos' },
+    { id: 'sin_pescado', nombre: 'Sin pescado' },
+    { id: 'sin_gluten', nombre: 'Sin gluten' },
+    { id: 'sin_leche', nombre: 'Sin leche de vaca' },
+    { id: 'sin_mani', nombre: 'Sin maní' },
+    { id: 'sin_mariscos', nombre: 'Sin mariscos y crustáceos' },
+    { id: 'sin_nueces', nombre: 'Sin nueces' }
+  ];
+  
+  // Renderizar vista según el estado actual
+  if (currentView === 'createPlan') {
+    return <CreatePlanStep formData={formData} onBack={handleBackToProfile} />;
+  }
+
+  if (currentView === 'viewPlan') {
+    return <ViewPlanStep formData={formData} onBack={handleBackToProfile} />;
+  }
+
+  // Vista de perfil
+  return (
+    <div className="profile-container">
+      <h2>Mi Perfil</h2>
+      
+      <div className="profile-card">
+        <div className="profile-avatar">
+          <div className="avatar-circle">
+            {displayData.nombre ? displayData.nombre.charAt(0).toUpperCase() : 'U'}
+          </div>
+        </div>
+
+        <div className="profile-info">
+          <div className="info-section">
+            <h3>Información Personal</h3>
+            
+            {renderEditableField('nombre', 'Nombre')}
+            {renderEditableField('edad', 'Edad', 'number')}
+            {renderEditableField('email', 'Email', 'email')}
+          </div>
+          
+          <div className="info-section">
+            <h3>Información Nutricional</h3>
+            
+            {renderReadOnlyField('peso', 'Peso', 'kg')}
+            {!categoriaValida && (
+                <div className="peso-invalid-msg">
+                  La categoría de peso seleccionada no es válida para el deporte y sexo actual. Por favor, elige una nueva.
+                </div>
+            )}
+            {renderReadOnlyField('sexo', 'Sexo')}
+            {renderReadOnlyField('deporte', 'Nivel de Actividad')}
+            {renderReadOnlyField('dieta', 'Tipo de Dieta')}
+            {renderReadOnlyField('restricciones', 'Restricciones')}
+            {renderReadOnlyField('comidas', 'Comidas diarias')}
+            {renderReadOnlyField('snacks', 'Snacks diarios')}
+          </div>
+        </div>
+        
+        <div className="profile-actions">
+          {planExists ? (
+            <>
+              {planModified ? (
+                <button className="update-plan-button" onClick={handleUpdatePlan}>
+                  Actualizar Plan de Alimentación
+                </button>
+              ) : null}
+              <button className="view-plan-button" onClick={handleViewPlan}>
+                Ver Plan de Alimentación
+              </button>
+            </>
+          ) : (
+            <button className="create-plan-button" onClick={handleCreatePlan}>
+              Crear Plan de Alimentación
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Popup para los steps */}
+      {popupStep && (
+        <div className="step-popup-overlay">
+          <div className="step-popup">
+            <button className="close-popup" onClick={closePopup}>×</button>
+            <div className="popup-content">
+              {popupStep === 'sport' && (
+                <SportStep 
+                  formData={formData} 
+                  onChange={handleStepChange} 
+                  isProfileEdit={true} 
+                />
+              )}
+              {popupStep === 'gender' && (
+                <GenderStep 
+                  formData={formData} 
+                  onChange={handleStepChange} 
+                  isProfileEdit={true} 
+                />
+              )}
+              {popupStep === 'weight' && (
+                <WeightStep 
+                  formData={formData} 
+                  onChange={handleStepChange} 
+                  isProfileEdit={true} 
+                />
+              )}
+              {popupStep === 'diet' && (
+                <DietStep 
+                  formData={formData} 
+                  onChange={handleStepChange}
+                  handleDietSelect={handleDietSelect}
+                  handleRestriccionToggle={handleRestriccionToggle}
+                  isProfileEdit={true} 
+                  editTarget={editTarget}
+                />
+              )}
+              {popupStep === 'meals' && (
+                <MealsStep 
+                  formData={formData} 
+                  onChange={handleStepChange} 
+                  isProfileEdit={true} 
+                  editTarget={editTarget} 
+                />
+              )}
+            </div>
+            <div className="popup-actions">
+              <button className="popup-done-button" onClick={closePopup}>
+                Listo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProfileStep;
