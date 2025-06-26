@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   gap: 2rem;
-  padding: 1rem;
 }
 
 .gender-option {
@@ -84,11 +83,11 @@
 
 .gender-title {
   font-family: var(--font-family);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: var(--body1);
+  font-weight: 900;
   color: #222;
   text-align: left;
-  line-height: 1.2;
+  line-height: 32px;
   margin: 0;
   width: 100%;
 }

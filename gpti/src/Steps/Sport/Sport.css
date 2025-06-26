@@ -4,7 +4,6 @@
   grid-template-columns: repeat(8, minmax(60px, 1fr));
   grid-template-rows: repeat(2, auto);
   gap: 2rem;
-  padding: 1rem;
   width: 100%;
   justify-items: center;
 }
@@ -120,11 +119,11 @@
 
 .sport-title {
   font-family: var(--font-family);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: var(--body1);
+  font-weight: 900;
   color: #222;
   text-align: left;
-  line-height: 1.2;
+  line-height: 32px;
   margin: 0;
   width: 100%;
 }
@@ -132,10 +131,10 @@
 
 .sport-desc {
   font-family: var(--font-family);
-  font-size: 0.7rem;
-  color: #bbb;
-  font-weight: 400;
-  line-height: 1.1;
+  font-size: 12px;
+  color: #656565;
+  font-weight: 900;
+  line-height: 16px;
   text-align: left;
   width: 100%;
 }

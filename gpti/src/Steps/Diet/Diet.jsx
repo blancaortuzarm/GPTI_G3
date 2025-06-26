@@ -2,7 +2,7 @@ import React from 'react';
 import './Diet.css';
 import eggsIcon from '../../assets/FoodImgs/eggs.svg';
 import fishIcon from '../../assets/FoodImgs/fish.svg';
-import glutenIcon from '../../assets/FoodImgs/gluten.svg';
+import glutenIcon from '../../assets/FoodImgs/glutten.svg';
 import milkIcon from '../../assets/FoodImgs/milk.svg';
 import peanutIcon from '../../assets/FoodImgs/peanut.svg';
 import shellfishIcon from '../../assets/FoodImgs/seafood.svg';
@@ -26,26 +26,55 @@ const restricciones = [
   { id: 'sin_nueces', nombre: 'Sin nueces', icon: nutsIcon }
 ];
 
-const DietStep = ({ formData, onChange }) => {
-  const handleRestriccionToggle = (id) => {
-    const yaSeleccionado = formData.restricciones.includes(id);
-    const nuevas = yaSeleccionado
-      ? formData.restricciones.filter((r) => r !== id)
-      : [...formData.restricciones, id];
+const DietStep = ({ formData, onChange, isProfileEdit = false, editTarget = null }) => {
+  const shouldShowDiets = !isProfileEdit || editTarget === 'dieta';
+  const shouldShowRestrictions = !isProfileEdit || editTarget === 'restricciones';
 
-    onChange({ target: { name: 'restricciones', value: nuevas } });
+  const handleDietSelect = (dietId) => {
+    onChange({
+      target: {
+        name: 'dieta',
+        value: dietId
+      }
+    });
+  };
+
+  const handleRestriccionToggle = (restriccionId) => {
+    // Obtener array actual de restricciones o inicializar como vacío
+    const restriccionesActuales = [...(formData.restricciones || [])];
+    
+    // Verificar si la restricción ya está seleccionada
+    const index = restriccionesActuales.indexOf(restriccionId);
+    
+    if (index === -1) {
+      // Si no está en el array, añadirla
+      restriccionesActuales.push(restriccionId);
+    } else {
+      // Si ya está en el array, quitarla
+      restriccionesActuales.splice(index, 1);
+    }
+    
+    // Actualizar el estado con el nuevo array
+    onChange({
+      target: {
+        name: 'restricciones',
+        value: restriccionesActuales
+      }
+    });
   };
 
   return (
     <div className="step-content">
-      <h2 className="view-title">Elige tu dieta</h2>
-
+       {shouldShowDiets && (
+          <h2 className="view-title">Elige tu dieta</h2>
+       )}
+      {shouldShowDiets && (
       <div className="diet-grid">
         {tiposDieta.map((tipo) => (
           <div
             key={tipo.id}
             className={`diet-card ${formData.dieta === tipo.id ? 'selected' : ''}`}
-            onClick={() => onChange({ target: { name: 'dieta', value: tipo.id } })}
+            onClick={() => handleDietSelect(tipo.id)}
             tabIndex={0}
             role="button"
             aria-pressed={formData.dieta === tipo.id}
@@ -70,22 +99,25 @@ const DietStep = ({ formData, onChange }) => {
             </div>
           </div>
         ))}
-      </div>
-
-      <h2 className="view-title">Restricciones alimentarias</h2>
+      </div>)}
+      
+      {shouldShowRestrictions && (
+          <h2 className="view-title">Restricciones alimentarias</h2>
+       )}
+      {shouldShowRestrictions && (
       <div className="restricciones-grid">
         {restricciones.map((r) => (
           <div
             key={r.id}
-            className={`restriccion-card ${formData.restricciones.includes(r.id) ? 'selected' : ''}`}
+            className={`restriccion-card ${formData.restricciones && formData.restricciones.includes(r.id) ? 'selected' : ''}`}
             onClick={() => handleRestriccionToggle(r.id)}
             tabIndex={0}
             role="button"
-            aria-pressed={formData.restricciones.includes(r.id)}
+            aria-pressed={formData.restricciones && formData.restricciones.includes(r.id)}
           >
             <div className="restriccion-img-container">
               <img src={r.icon} alt={r.nombre} />
-              {formData.restricciones.includes(r.id) && (
+              {formData.restricciones && formData.restricciones.includes(r.id) && (
                 <span className="restriccion-check">
                   <svg width="28" height="28" viewBox="0 0 28 28">
                     <circle cx="14" cy="14" r="14" fill="#fff" />
@@ -106,7 +138,7 @@ const DietStep = ({ formData, onChange }) => {
             </div>
           </div>
         ))}
-      </div>
+      </div>)}
     </div>
   );
 };

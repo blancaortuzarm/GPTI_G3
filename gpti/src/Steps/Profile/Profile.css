@@ -1,0 +1,432 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.profile-container h2 {
+  font-family: var(--font-family);
+  font-size: var(--h2);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+}
+
+.profile-card {
+  width: 100%;
+  background-color: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border: var(--card-border);
+  backdrop-filter: var(--card-backdrop);
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 600;
+  box-shadow: var(--elevation-2);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+}
+
+.info-section h3 {
+  font-family: var(--font-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.info-row {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  align-items: center;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: 40%;
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-weight: 500;
+  color: var(--text-primary);
+  flex-grow: 1;
+}
+
+/* Estilos para el campo editable */
+.value-with-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-grow: 1;
+}
+
+.edit-field-button {
+  background: none;
+  border: none;
+  color: var(--yellow);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.edit-field-button:hover {
+  background-color: rgba(255, 173, 18, 0.1);
+  transform: scale(1.1);
+}
+
+.edit-field-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+.edit-field-container input {
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--card-radius);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+}
+
+.edit-field-container input:focus {
+  outline: none;
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 3px rgba(255, 173, 18, 0.25);
+}
+
+.edit-field-container input.error {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: var(--caption);
+  margin-top: 0.3rem;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.save-field-button, 
+.cancel-field-button {
+  padding: 6px 10px;
+  border-radius: var(--card-radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-field-button {
+  background-color: var(--yellow);
+  color: white;
+}
+
+.save-field-button:hover {
+  background-color: var(--yellow-2);
+  transform: var(--hover-transform);
+}
+
+.cancel-field-button {
+  background-color: #f5f5f5;
+  color: var(--text-secondary);
+}
+
+.cancel-field-button:hover {
+  background-color: #e0e0e0;
+  transform: var(--hover-transform);
+}
+
+.profile-actions {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.continue-button {
+  flex: 1;
+  padding: 14px 24px;
+  border-radius: var(--card-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--body1);
+  font-family: var(--font-family);
+  background-color: var(--yellow);
+  color: white;
+  border: 2px solid var(--yellow);
+  box-shadow: var(--elevation-1);
+  text-align: center;
+}
+
+.continue-button:hover {
+  background-color: var(--yellow-2);
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+/* Estilos para el popup */
+.step-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.step-popup {
+  background-color: var(--surface);
+  border-radius: var(--card-radius);
+  box-shadow: var(--elevation-3);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+.close-popup {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-popup:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.popup-content {
+  margin-bottom: 2rem;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1.5rem;
+}
+
+.popup-done-button {
+  padding: 10px 24px;
+  border-radius: var(--card-radius);
+  background-color: var(--yellow);
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-family);
+  box-shadow: var(--elevation-1);
+}
+
+.popup-done-button:hover {
+  background-color: var(--yellow-2);
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+/* Para añadir iconos FontAwesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+/* Botones de edición individuales */
+.value-with-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.edit-field-button {
+  background: none;
+  border: none;
+  color: var(--yellow);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.edit-field-button:hover {
+  background-color: rgba(255, 173, 18, 0.1);
+  transform: scale(1.1);
+}
+
+.edit-field-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.edit-field-container input {
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--card-radius);
+  font-size: 1rem;
+  font-family: var(--font-family);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.save-field-button, .cancel-field-button {
+  padding: 6px 12px;
+  border-radius: var(--card-radius);
+  border: none;
+  cursor: pointer;
+}
+
+.save-field-button {
+  background-color: var(--yellow);
+  color: white;
+}
+
+.cancel-field-button {
+  background-color: #f0f0f0;
+  color: var(--text-secondary);
+}
+
+/* Ajustes para el popup del DietStep y MealsStep */
+.step-popup .step-content {
+  padding: 0;
+}
+
+.step-popup h2.view-title {
+  margin-top: 0;
+}
+
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.create-plan-button,
+.update-plan-button,
+.view-plan-button {
+  padding: 14px 24px;
+  border-radius: var(--card-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--body1);
+  font-family: var(--font-family);
+  text-align: center;
+  box-shadow: var(--elevation-1);
+  border: 2px solid var(--yellow);
+}
+
+.create-plan-button,
+.update-plan-button {
+  background-color: var(--yellow);
+  color: white;
+}
+
+.create-plan-button:hover,
+.update-plan-button:hover {
+  background-color: var(--yellow-2);
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+.view-plan-button {
+  background-color: white;
+  color: var(--yellow);
+}
+
+.view-plan-button:hover {
+  background-color: rgba(255, 173, 18, 0.1);
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+.peso-invalid-msg {
+  color: #e74c3c;
+  background: #fff0f0;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  margin-bottom: 1em;
+  text-align: center;
+  font-weight: 500;
+}

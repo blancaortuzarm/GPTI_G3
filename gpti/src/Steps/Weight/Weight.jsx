@@ -153,20 +153,23 @@ const WeightStep = ({ formData, onChange }) => {
     }
   }
 
-  if (categoriasPesoPorDeporte[deporte].length === 0) {
+  if (!categorias || categorias.length === 0) {
     categorias = [
-      { id: 'ligero', nombre: 'Ligero', descripcion: 'menos de 60kg', icon: ligeroIcon },
-      { id: 'medio', nombre: 'Medio', descripcion: '60–75kg', icon: medioIcon },
-      { id: 'pesado', nombre: 'Pesado', descripcion: '75–90kg', icon: pesadoIcon },
-      { id: 'super_pesado', nombre: 'Súper pesado', descripcion: 'más de 90kg', icon: superPesadoIcon }
+      { id: 'ligero', valor: 'Ligero', descripcion: 'menos de 60kg', icon: ligeroIcon },
+      { id: 'medio', valor: 'Medio', descripcion: '60–75kg', icon: medioIcon },
+      { id: 'pesado', valor: 'Pesado', descripcion: '75–90kg', icon: pesadoIcon },
+      { id: 'super_pesado', valor: 'Súper pesado', descripcion: 'más de 90kg', icon: superPesadoIcon }
     ];
   }
+
+  const hasAtleastOneDescription = categorias.some(
+    cat => cat.descripcion && cat.descripcion.trim() !== ''
+  );
 
   // Encuentra el string más largo para ajustar el tamaño de fuente
   const maxLen = Math.max(...categorias.map(cat => cat.valor.length));
   // Puedes ajustar el tamaño base según el largo máximo
-  const fontSize = `clamp(1.5rem, ${Math.max(1.8, 4 - maxLen * 0.2)}rem, 2.8rem)`;
-  const minWidth = Math.max(180, maxLen * 20 + 40);
+  const minWidth = Math.max(120, maxLen * 15 + 40);
   const gridStyle = {
     display: 'grid',
     gridTemplateColumns: `repeat(auto-fit, ${minWidth}px)`,
@@ -211,10 +214,10 @@ const WeightStep = ({ formData, onChange }) => {
               )}
               <div className="peso-unit">{cat.unidad}</div>
             </div>
-            <div className="peso-card-content">
+            {hasAtleastOneDescription &&  <div className="peso-card-content">
 
               {cat.descripcion && <div className="peso-desc">{cat.descripcion}</div>}
-            </div>
+            </div>}
           </div>
         ))}
       </div>

@@ -1,0 +1,123 @@
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.auth-container h2 {
+  font-family: var(--font-family);
+  font-size: var(--h2);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.form-group label {
+  font-family: var(--font-family);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-size: var(--body2);
+}
+
+.form-group input {
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--card-radius);
+  font-size: var(--body1);
+  font-family: var(--font-family);
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 3px rgba(255, 173, 18, 0.25);
+  transform: var(--hover-transform);
+}
+
+.form-group input.error {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: var(--caption);
+  font-family: var(--font-family);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
+.back-button, .submit-button {
+  flex: 1;
+  padding: 14px 24px;
+  border-radius: var(--card-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--body1);
+  font-family: var(--font-family);
+  box-shadow: var(--elevation-1);
+}
+
+.back-button {
+  background-color: var(--surface);
+  color: var(--text-secondary);
+  border: 1px solid #ccc;
+}
+
+.back-button:hover {
+  background-color: #f5f5f5;
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+.submit-button {
+  background-color: var(--yellow);
+  color: white;
+  border: 2px solid var(--yellow);
+}
+
+.submit-button:hover {
+  background-color: var(--yellow-2);
+  transform: var(--hover-transform);
+  box-shadow: var(--elevation-2);
+}
+
+/* Contenedor de entrada con estilo de tarjeta */
+.form-group {
+  position: relative;
+}
+
+/* Estilo de selección para campos con foco o con contenido */
+.form-group input:not(:placeholder-shown),
+.form-group input:focus {
+  border-color: var(--yellow);
+}
