@@ -165,6 +165,8 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
   const [editedData, setEditedData] = useState({});
   const [loading, setLoading] = useState(true);
   const [saveMessage, setSaveMessage] = useState('');
+  const [needsUpdate, setNeedsUpdate] = useState(true); // Cambio temporal para testing
+  const [lastUpdateDate, setLastUpdateDate] = useState(new Date(Date.now() - 16 * 24 * 60 * 60 * 1000)); // Fecha simulada de hace 16 días
   const hasLoadedRef = useRef(false);
   const [errors, setErrors] = useState({
     nombre: '',
@@ -173,9 +175,19 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
   });
 
   // Simulamos si el plan existe o no
-  // En una implementación real, esto vendría de props o API
   const planExists = Boolean(formData.planCreated);
   const planModified = hasProfileChanged();
+
+  // Función para verificar si han pasado 15 días desde la última actualización
+  const checkIfNeedsUpdate = (lastUpdate) => {
+    if (!lastUpdate) return false;
+    return true; // Para testing, siempre forzamos a que se muestre el recordatorio
+    
+     //const now = new Date();
+     //const updateDate = new Date(lastUpdate);
+     //const daysDifference = Math.floor((now - updateDate) / (1000 * 60 * 60 * 24));
+     //return daysDifference >= 15;
+  };
 
   // Cargar datos del usuario al inicializar el componente
   useEffect(() => {
@@ -260,6 +272,14 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
               // El peso se maneja como categoría, no como valor numérico
               if (latestHistory.WeightCategory) {
                 updatedFormData.peso = latestHistory.WeightCategory.name || updatedFormData.peso;
+              }
+              
+              // Verificar fecha de última actualización y si necesita actualizar
+              if (latestHistory.createdAt) {
+                const lastUpdate = new Date(latestHistory.createdAt);
+                setLastUpdateDate(lastUpdate);
+                const needsUpdateCheck = checkIfNeedsUpdate(latestHistory.createdAt);
+                setNeedsUpdate(needsUpdateCheck);
               }
             }
 
@@ -461,9 +481,13 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
     try {
       // Map form data to backend format
       const historyData = FormDataMapper.mapFormDataToHistory(updatedData);
-      console.log('!!!!!!!!!!!!!!!!!1:', historyData);
       // Save ONLY to history
       await ApiService.addUserHistory(user.id, historyData, token);
+      
+      // Actualizar estado local después de guardar exitosamente
+      const now = new Date();
+      setLastUpdateDate(now);
+      setNeedsUpdate(false);
       
       console.log('UserHistory saved successfully');
     } catch (error) {
@@ -725,6 +749,18 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
         </div>
       )}
       
+      {needsUpdate && (
+        <div className="update-reminder">
+          <div className="update-reminder-content">
+            <i className="fas fa-exclamation-triangle"></i>
+            <div className="update-reminder-text">
+              <strong>¡Es hora de actualizar tus datos!</strong>
+              <p>Han pasado más de 15 días desde tu última actualización. Te recomendamos revisar y actualizar tu información para mantener tu plan de alimentación optimizado.</p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="profile-card">
         <div className="profile-avatar">
           <div className="avatar-circle">
@@ -757,6 +793,22 @@ const ProfileStep = ({ formData, onUpdate, user, token }) => {
             {renderReadOnlyField('comidas', 'Comidas diarias')}
             {renderReadOnlyField('snacks', 'Snacks diarios')}
           </div>
+          
+          {lastUpdateDate && (
+            <div className="info-section">
+              <h3>Historial</h3>
+              <div className="info-row">
+                <span className="info-label">Última actualización:</span>
+                <span className="info-value">
+                  {lastUpdateDate.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="profile-actions">
