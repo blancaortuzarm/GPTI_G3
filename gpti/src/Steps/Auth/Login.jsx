@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../../auth/AuthContext';
 import './Auth.css';
 
 const LoginStep = ({ onBack, onSubmit }) => {
+  const { token, setToken } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -49,10 +52,31 @@ const LoginStep = ({ onBack, onSubmit }) => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit(formData);
+      const dataToSend = {
+        email: formData.email,      // Usa 'email'
+        password: formData.password // Usa 'password'
+      };
+      try {
+        const response = await axios.post(
+          'http://localhost:3000/users/login', // Corrige la ruta
+          dataToSend
+        );
+        if (response.status === 200) {
+          const { token, user } = response.data;
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user)); // Guarda el usuario completo
+          // Puedes guardar más datos si tu backend los envía
+          if (onSubmit) onSubmit(formData);
+        }
+      } catch (error) {
+        setErrors(prev => ({
+          ...prev,
+          password: 'Correo o contraseña incorrectos'
+        }));
+      }
     }
   };
 
