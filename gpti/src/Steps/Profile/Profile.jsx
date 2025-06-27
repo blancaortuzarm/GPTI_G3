@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Profile.css';
 import SportStep from '../Sport/Sport';
 import GenderStep from '../Gender/Gender';
@@ -7,6 +7,8 @@ import DietStep from '../Diet/Diet';
 import MealsStep from '../Meals/Meals';
 import CreatePlanStep from '../Plans/CreatePlan';
 import ViewPlanStep from '../Plans/ViewPlan';
+import ApiService from '../../services/api';
+import FormDataMapper from '../../utils/formDataMapper';
 
 const categoriasPesoPorDeporte = {
   muaythai: {
@@ -155,14 +157,15 @@ function isPesoCategoriaValida({ deporte, sexo, peso }) {
   return categorias.some(cat => cat.id === peso);
 }
 
-const ProfileStep = ({ formData, onUpdate, onContinue }) => {
-  
-
+const ProfileStep = ({ formData, onUpdate, user, token }) => {
   const [editingField, setEditingField] = useState(null);
   const [popupStep, setPopupStep] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
   const [currentView, setCurrentView] = useState('profile'); // 'profile', 'createPlan', 'viewPlan'
   const [editedData, setEditedData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [saveMessage, setSaveMessage] = useState('');
+  const hasLoadedRef = useRef(false);
   const [errors, setErrors] = useState({
     nombre: '',
     edad: '',
@@ -172,36 +175,166 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
   // Simulamos si el plan existe o no
   // En una implementación real, esto vendría de props o API
   const planExists = Boolean(formData.planCreated);
-  const planModified = hasProfileChanged(formData);
+  const planModified = hasProfileChanged();
 
+  // Cargar datos del usuario al inicializar el componente
+  useEffect(() => {
+    // Cargar perfil del usuario desde el backend
+    const loadUserProfile = async () => {
+      if (!user || !token || !user.id || hasLoadedRef.current) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        hasLoadedRef.current = true;
+        const response = await ApiService.getUserById(user.id, token);
+        if (response.success) {
+          // Actualizar formData con los datos del usuario si existen
+          if (response.data) {
+            let updatedFormData = {
+              nombre: response.data.name || 'Usuario',
+              edad: response.data.age || '25',
+              email: response.data.email || 'usuario@ejemplo.com',
+              peso: 'Jr. Middleweight',
+              sexo: 'male',
+              deporte: 'muaythai',
+              dieta: 'omnivora',
+              comidas: 3,
+              snacks: 2,
+              restricciones: []
+            };
+            
+            // Si hay perfil, agregar esos datos también
+            if (response.data.UserProfile) {
+              const profile = response.data.UserProfile;
+              updatedFormData.comidas = profile.mainMealsCount || updatedFormData.comidas;
+              updatedFormData.snacks = profile.snacksCount || updatedFormData.snacks;
+              
+              // Mapear deporte basado en Sport
+              if (profile.Sport) {
+                const sportMapping = {
+                  'Boxeo': 'boxing',
+                  'Judo': 'judo', 
+                  'Lucha': 'wrestling',
+                  'Taekwondo': 'taekwondo',
+                  'Turf': 'horseracing',
+                  'Halterofilia': 'weightlifting',
+                  'Muay Thai': 'muaythai'
+                };
+                updatedFormData.deporte = sportMapping[profile.Sport.name] || updatedFormData.deporte;
+              }
+              
+              // Mapear dieta basada en Diet
+              if (profile.Diet) {
+                const dietMapping = {
+                  'Omnivora': 'omnivora',
+                  'Vegetariana': 'vegetariana',
+                  'Vegana': 'vegana',
+                  'Keto': 'keto',
+                  'Paleo': 'paleo'
+                };
+                updatedFormData.dieta = dietMapping[profile.Diet.name] || updatedFormData.dieta;
+              }
+              
+              // Mapear categoría de peso
+              if (profile.WeightCategory) {
+                console.log('Peso categoría:', profile.WeightCategory.name);
+
+                updatedFormData.peso = profile.WeightCategory.name || updatedFormData.peso;
+              }
+            }
+
+            // Mapear género desde el usuario (si está disponible)
+            if (response.data.gender) {
+              const genderMapping = {
+                'Masculino': 'male',
+                'Femenino': 'female'
+              };
+              updatedFormData.sexo = genderMapping[response.data.gender] || updatedFormData.sexo;
+            }
+
+            // Cargar datos del historial más reciente (peso como categoría)
+            if (response.data.UserHistories && response.data.UserHistories.length > 0) {
+              const latestHistory = response.data.UserHistories[0];
+              // El peso se maneja como categoría, no como valor numérico
+              if (latestHistory.WeightCategory) {
+                updatedFormData.peso = latestHistory.WeightCategory.name || updatedFormData.peso;
+              }
+            }
+
+            // Cargar restricciones dietéticas del usuario
+            try {
+              const restrictionsResponse = await ApiService.getUserRestrictions(user.id, token);
+              if (restrictionsResponse.success && restrictionsResponse.data.length > 0) {
+                const restrictionNames = restrictionsResponse.data.map(item => {
+                  const restrictionMapping = {
+                    'Sin Gluten': 'sin_gluten',
+                    'Maní': 'sin_mani',
+                    'Mariscos y Crustáceos': 'sin_mariscos',
+                    'Nueces': 'sin_nueces',
+                    'Leche de vaca': 'sin_leche',
+                    'Pescado': 'sin_pescado',
+                    'Huevos': 'sin_huevos'
+                  };
+                  return restrictionMapping[item.DietaryRestriction.name] || item.DietaryRestriction.name.toLowerCase();
+                });
+                
+                updatedFormData.restricciones = restrictionNames;
+              }
+            } catch (restrictionError) {
+              console.error('Error loading user restrictions:', restrictionError);
+            }
+            
+            // Update formData only once at the end
+            onUpdate(updatedFormData);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadUserProfile();
+  }, [user?.id, token]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Only depend on user.id and token to prevent infinite loops
+  // 'onUpdate' is intentionally excluded to prevent infinite re-renders
   // Función para determinar si el perfil ha sido modificado
-  function hasProfileChanged(currentData) {
+  function hasProfileChanged() {
     // Aquí implementa la lógica para comparar el estado actual con el estado inicial
     // Por ahora simplemente devolvemos true para demostración
     return true;
   }
 
-  // Datos hardcodeados para campos vacíos
+  // Datos por defecto con nombres exactos de la base de datos
   const defaultData = {
-    nombre: 'Usuario Demo',
-    edad: '30',
-    email: 'usuario@ejemplo.com',
-    peso: '69.9',
+    nombre: user?.name || 'Usuario',
+    edad: user?.age || '25',
+    email: user?.email || 'usuario@ejemplo.com',
+    peso: 'Jr. Middleweight', // nombre exacto de la base de datos
     sexo: 'male',
     deporte: 'muaythai',
     dieta: 'omnivora',
     comidas: 3,
     snacks: 2,
-    restricciones: ['sin_gluten']
+    restricciones: []
   };
 
-  // Combinamos datos reales con defaults para campos vacíos
+  // Usar datos reales del formData, con fallback a datos por defecto solo si está vacío
   const displayData = Object.fromEntries(
     Object.entries(defaultData).map(([key, defaultValue]) => {
       const userValue = formData[key];
-      return [key, userValue || defaultValue];
+      // Solo usar default si el valor del usuario está completamente vacío
+      return [key, (userValue !== undefined && userValue !== null && userValue !== '') ? userValue : defaultValue];
     })
   );
+
+  // Mostrar loading mientras cargamos los datos
+  if (loading) {
+    return <div className="profile-container"><div>Cargando perfil...</div></div>;
+  }
 
   const categoriaValida = isPesoCategoriaValida(displayData);
   
@@ -309,11 +442,33 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
 
   const handleSaveField = (field) => {
     if (validate(field)) {
-      onUpdate({
+      const updatedFormData = {
         ...formData,
         ...editedData
-      });
+      };
+      
+      // Update local state only
+      onUpdate(updatedFormData);
+      
       setEditingField(null);
+    }
+  };
+
+  // Save profile changes to backend - SOLO UserHistories
+  const saveProfileToBackend = async (updatedData) => {
+    if (!user || !token) return;
+    
+    try {
+      // Map form data to backend format
+      const historyData = FormDataMapper.mapFormDataToHistory(updatedData);
+      console.log('!!!!!!!!!!!!!!!!!1:', historyData);
+      // Save ONLY to history
+      await ApiService.addUserHistory(user.id, historyData, token);
+      
+      console.log('UserHistory saved successfully');
+    } catch (error) {
+      console.error('Error saving to UserHistory:', error);
+      throw error; // Re-throw to be handled by calling function
     }
   };
 
@@ -329,32 +484,40 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
   const handleStepChange = (e) => {
     const { name, value, type, checked } = e.target;
     
+    let updatedFormData;
+    
     if (type === 'checkbox') {
       if (checked) {
-        onUpdate({
+        updatedFormData = {
           ...formData,
           [name]: [...(formData[name] || []), value]
-        });
+        };
       } else {
-        onUpdate({
+        updatedFormData = {
           ...formData,
           [name]: (formData[name] || []).filter(item => item !== value)
-        });
+        };
       }
     } else {
-      onUpdate({
+      updatedFormData = {
         ...formData,
         [name]: value
-      });
+      };
     }
+    
+    // Update local state only
+    onUpdate(updatedFormData);
   };
 
   // Manejador específico para la selección de dieta
   const handleDietSelect = (dietId) => {
-    onUpdate({
+    const updatedFormData = {
       ...formData,
       dieta: dietId
-    });
+    };
+    
+    // Update local state only
+    onUpdate(updatedFormData);
   };
 
   // Manejador específico para restricciones alimentarias
@@ -368,10 +531,13 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
       restricciones.splice(index, 1);
     }
     
-    onUpdate({
+    const updatedFormData = {
       ...formData,
       restricciones
-    });
+    };
+    
+    // Update local state only
+    onUpdate(updatedFormData);
   };
 
   const closePopup = () => {
@@ -379,18 +545,42 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
     setEditTarget(null);
   };
 
-  const handleCreatePlan = () => {
-    setCurrentView('createPlan');
+  const handleCreatePlan = async () => {
+    // Guardar perfil al backend antes de crear el plan
+    try {
+      setSaveMessage('Guardando perfil...');
+      await saveProfileToBackend(formData);
+      setSaveMessage('✓ Perfil guardado correctamente');
+      setTimeout(() => setSaveMessage(''), 2000);
+      
+      // Después de guardar exitosamente, ir a crear plan
+      setCurrentView('createPlan');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setSaveMessage('✗ Error al guardar perfil');
+      setTimeout(() => setSaveMessage(''), 5000);
+    }
   };
 
-  const handleUpdatePlan = () => {
-    // Actualizamos el plan y luego lo mostramos
-    // En una implementación real, aquí iría la llamada a la API
-    onUpdate({
-      ...formData,
-      planCreated: true // Marcamos que el usuario ya tiene un plan
-    });
-    setCurrentView('viewPlan');
+  const handleUpdatePlan = async () => {
+    // Guardar perfil al backend antes de actualizar el plan
+    try {
+      setSaveMessage('Guardando cambios...');
+      await saveProfileToBackend(formData);
+      setSaveMessage('✓ Cambios guardados correctamente');
+      setTimeout(() => setSaveMessage(''), 2000);
+      
+      // Actualizamos el plan y luego lo mostramos
+      onUpdate({
+        ...formData,
+        planCreated: true // Marcamos que el usuario ya tiene un plan
+      });
+      setCurrentView('viewPlan');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setSaveMessage('✗ Error al guardar cambios');
+      setTimeout(() => setSaveMessage(''), 5000);
+    }
   };
 
   const handleViewPlan = () => {
@@ -517,7 +707,7 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
   
   // Renderizar vista según el estado actual
   if (currentView === 'createPlan') {
-    return <CreatePlanStep formData={formData} onBack={handleBackToProfile} />;
+    return <CreatePlanStep formData={formData} user={user} onBack={handleBackToProfile} />;
   }
 
   if (currentView === 'viewPlan') {
@@ -528,6 +718,12 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
   return (
     <div className="profile-container">
       <h2>Mi Perfil</h2>
+      
+      {saveMessage && (
+        <div className={`save-message ${saveMessage.includes('✓') ? 'success' : 'error'}`}>
+          {saveMessage}
+        </div>
+      )}
       
       <div className="profile-card">
         <div className="profile-avatar">
@@ -548,7 +744,7 @@ const ProfileStep = ({ formData, onUpdate, onContinue }) => {
           <div className="info-section">
             <h3>Información Nutricional</h3>
             
-            {renderReadOnlyField('peso', 'Peso', 'kg')}
+            {renderReadOnlyField('peso', 'Categoría de Peso')}
             {!categoriaValida && (
                 <div className="peso-invalid-msg">
                   La categoría de peso seleccionada no es válida para el deporte y sexo actual. Por favor, elige una nueva.

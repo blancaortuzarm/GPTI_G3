@@ -10,6 +10,8 @@ import WeightStep from '../Steps/Weight/Weight';
 import DietStep from '../Steps/Diet/Diet';
 import MealsStep from '../Steps/Meals/Meals';
 import ResultStep from '../Steps/Result/Result';
+import ApiService from '../services/api';
+import FormDataMapper from '../utils/formDataMapper';
 
 const MultiStepForm = () => {
   // Agregar un estado para controlar la vista (normal o autenticación)
@@ -30,6 +32,9 @@ const MultiStepForm = () => {
     email: '',
     planCreated: false // Para controlar si el usuario ya tiene un plan
   });
+
+  // Nuevo estado para manejar la información del usuario autenticado
+  const [user, setUser] = useState(null); // { id, token, name, email, etc. }
 
   const totalSteps = 5;
   const showProgressBar = view === 'form' && currentStep >= 1 && currentStep <= totalSteps;
@@ -65,16 +70,82 @@ const MultiStepForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleNext();
-    // Al finalizar el formulario, marcamos que el usuario tiene un plan
     if (isLastFormStep) {
+      // Al finalizar el formulario, guardar los datos en el backend
+      if (user && user.id && user.token) {
+        try {
+          // Por ahora vamos a usar un peso simulado basado en la categoría
+          // TODO: Agregar un campo de peso real en el formulario
+          const simulatedWeight = getWeightFromCategory(formData.peso);
+          
+          // Mapear los datos del formulario a los IDs de la base de datos
+          const profileData = FormDataMapper.mapFormDataToProfile(formData, simulatedWeight);
+          
+          console.log('Datos del formulario:', formData);
+          console.log('Peso simulado:', simulatedWeight);
+          console.log('Creando perfil con datos:', profileData);
+          
+          // Crear el perfil del usuario
+          await ApiService.createUserProfile(user.id, profileData, user.token);
+          
+          // También crear una entrada en el historial con datos básicos
+          const historyData = FormDataMapper.mapFormDataToHistory(formData, { 
+            weight: simulatedWeight
+          });
+          console.log('Creando historial con datos:', historyData);
+          await ApiService.addUserHistory(user.id, historyData, user.token);
+          
+          // Guardar restricciones dietéticas si las hay
+          if (formData.restricciones && formData.restricciones.length > 0) {
+            const restrictionIds = FormDataMapper.getDietaryRestrictionIds(formData.restricciones);
+            console.log('Guardando restricciones:', restrictionIds);
+            await ApiService.updateUserRestrictions(user.id, restrictionIds, user.token);
+          }
+          
+          console.log('Perfil, historial y restricciones creados exitosamente');
+        } catch (error) {
+          console.error('Error al crear perfil:', error);
+          // Continuar con el flujo aunque falle el guardado
+        }
+      }
+      
       setFormData({
         ...formData,
         planCreated: true
       });
     }
+    handleNext();
+  };
+
+  // Función helper para obtener un peso simulado basado en la categoría
+  const getWeightFromCategory = (categoria) => {
+    const weightMapping = {
+      'miniflyweight': 47.6,
+      'jr_flyweight': 49.0,
+      'flyweight': 50.8,
+      'jr_bantamweight': 52.2,
+      'bantamweight': 53.5,
+      'jr_featherweight': 55.3,
+      'featherweight': 57.2,
+      'jr_lightweight': 59.0,
+      'lightweight': 61.2,
+      'jr_welterweight': 63.5,
+      'welterweight': 66.7,
+      'jr_middleweight': 69.9,
+      'middleweight': 72.6,
+      'super_middleweight': 76.2,
+      'light_heavyweight': 79.4,
+      'cruiserweight': 90.7,
+      'heavyweight': 95.0, // valor estimado
+      // Agregar más categorías según sea necesario
+      'ligero': 60,
+      'medio': 75,
+      'pesado': 90,
+      'super_pesado': 105
+    };
+    return weightMapping[categoria] || 70; // peso por defecto
   };
 
   const handleChange = (e) => {
@@ -110,31 +181,59 @@ const MultiStepForm = () => {
   };
 
   const handleLoginSubmit = (loginData) => {
-    // Aquí iría la lógica de autenticación real
     console.log('Login data:', loginData);
     
-    // Por ahora solo simularemos un inicio de sesión exitoso
-    setFormData({
-      ...formData,
-      email: loginData.email,
-      // Otros datos que vendrían del servidor
-      nombre: 'Usuario'
-    });
-    setView('profile'); // Ahora va al perfil en lugar de al formulario directamente
+    if (loginData.success) {
+      // Login exitoso - guardar datos del usuario
+      const userData = loginData.user;
+      setUser({
+        id: userData.id,
+        token: loginData.token,
+        name: userData.name,
+        email: userData.email,
+        age: userData.age
+      });
+      
+      setFormData({
+        ...formData,
+        email: userData.email,
+        nombre: userData.name,
+        edad: userData.age
+      });
+      
+      setView('profile'); // Ir al perfil después del login
+    } else {
+      // El error ya se maneja en el componente LoginStep
+      console.error('Error en el login');
+    }
   };
 
   const handleRegisterSubmit = (registerData) => {
-    // Aquí iría la lógica de registro real
     console.log('Register data:', registerData);
     
-    // Por ahora solo simularemos un registro exitoso
-    setFormData({
-      ...formData,
-      nombre: registerData.nombre,
-      edad: registerData.edad,
-      email: registerData.email
-    });
-    setView('profile'); // Ir al perfil después del registro
+    if (registerData.success) {
+      // Registro exitoso - guardar datos del usuario
+      const userData = registerData.user;
+      setUser({
+        id: userData.id,
+        token: registerData.token, // Ahora el backend devuelve el token
+        name: userData.name,
+        email: userData.email,
+        age: userData.age
+      });
+      
+      setFormData({
+        ...formData,
+        nombre: userData.name,
+        edad: userData.age,
+        email: userData.email
+      });
+      
+      setView('profile'); // Ir al perfil después del registro
+    } else {
+      // El error ya se maneja en el componente RegisterStep
+      console.error('Error en el registro');
+    }
   };
 
   const handleProfileUpdate = (updatedData) => {
@@ -221,13 +320,15 @@ const MultiStepForm = () => {
         {view === 'profile' && (
           <ProfileStep 
             formData={formData}
+            user={user}
+            token={user?.token}
             onUpdate={handleProfileUpdate}
             onContinue={handleStartPlanCreation}
           />
         )}
 
         {view === 'form' && isResultStep ? (
-          <ResultStep formData={formData} onFinish={handlePlanCreated} />
+          <ResultStep formData={formData} user={user} onFinish={handlePlanCreated} />
         ) : view === 'form' && (
           <form onSubmit={isLastFormStep ? handleSubmit : (e) => e.preventDefault()}>
             {currentStep === 1 && (

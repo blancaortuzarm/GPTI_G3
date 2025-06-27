@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Result.css';
+import ApiService from '../../services/api';
 
-const ResultStep = ({ formData }) => {
+const ResultStep = ({ formData, user }) => {
+  const [recommendation, setRecommendation] = useState('');
+  const [isLoadingRecommendation, setIsLoadingRecommendation] = useState(false);
+  const [errorRecommendation, setErrorRecommendation] = useState('');
+
+  useEffect(() => {
+    const fetchRecommendation = async () => {
+      if (user && user.id && user.token) {
+        setIsLoadingRecommendation(true);
+        setErrorRecommendation('');
+        try {
+          const response = await ApiService.getUserRecommendation(user.id, user.token);
+          setRecommendation(response.data.recommendation);
+        } catch (error) {
+          console.error('Error al obtener recomendación:', error);
+          setErrorRecommendation('No se pudo obtener la recomendación personalizada');
+        } finally {
+          setIsLoadingRecommendation(false);
+        }
+      }
+    };
+
+    fetchRecommendation();
+  }, [user]);
+
   console.log(formData);
   return (
     <div className="result-view">
@@ -39,6 +64,31 @@ const ResultStep = ({ formData }) => {
           <strong>Snacks:</strong>
           <span>{formData.snacks || 'No definido'}</span>
         </div>
+      </div>
+
+      {/* Sección de recomendación de IA */}
+      <div className="ai-recommendation-section">
+        <h3 className="recommendation-title">🤖 Recomendación Personalizada</h3>
+        {isLoadingRecommendation && (
+          <div className="loading-recommendation">
+            <p>Generando tu recomendación personalizada...</p>
+          </div>
+        )}
+        {errorRecommendation && (
+          <div className="error-recommendation">
+            <p>{errorRecommendation}</p>
+          </div>
+        )}
+        {recommendation && !isLoadingRecommendation && (
+          <div className="recommendation-content">
+            <p>{recommendation}</p>
+          </div>
+        )}
+        {!user && (
+          <div className="no-user-recommendation">
+            <p>Para obtener una recomendación personalizada, necesitas estar registrado e iniciar sesión.</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Auth.css';
+import ApiService from '../../services/api';
 
 const RegisterStep = ({ onBack, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const RegisterStep = ({ onBack, onSubmit }) => {
     email: '',
     password: ''
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,10 +72,32 @@ const RegisterStep = ({ onBack, onSubmit }) => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit(formData);
+      setIsLoading(true);
+      try {
+        const response = await ApiService.registerUser(formData);
+        console.log('Usuario registrado exitosamente:', response);
+        
+        // Si el registro es exitoso, llamamos onSubmit con los datos del usuario
+        onSubmit({
+          success: true,
+          user: response.data,
+          message: response.message
+        });
+      } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        
+        // Mostrar error en el formulario
+        setErrors({
+          ...errors,
+          email: error.message.includes('correo') ? error.message : '',
+          password: !error.message.includes('correo') ? error.message : ''
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -140,8 +165,8 @@ const RegisterStep = ({ onBack, onSubmit }) => {
           <button type="button" className="back-button" onClick={onBack}>
             Volver
           </button>
-          <button type="submit" className="submit-button">
-            Registrarse
+          <button type="submit" className="submit-button" disabled={isLoading}>
+            {isLoading ? 'Registrando...' : 'Registrarse'}
           </button>
         </div>
       </form>

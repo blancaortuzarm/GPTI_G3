@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Auth.css';
+import ApiService from '../../services/api';
 
 const LoginStep = ({ onBack, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const LoginStep = ({ onBack, onSubmit }) => {
     email: '',
     password: ''
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,10 +52,33 @@ const LoginStep = ({ onBack, onSubmit }) => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit(formData);
+      setIsLoading(true);
+      try {
+        const response = await ApiService.loginUser(formData);
+        console.log('Usuario logueado exitosamente:', response);
+        
+        // Si el login es exitoso, llamamos onSubmit con los datos del usuario
+        onSubmit({
+          success: true,
+          user: response.data,
+          token: response.token,
+          message: response.message
+        });
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        
+        // Mostrar error en el formulario
+        setErrors({
+          ...errors,
+          email: error.message.includes('correo') || error.message.includes('email') ? error.message : '',
+          password: !error.message.includes('correo') && !error.message.includes('email') ? error.message : ''
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -92,8 +118,8 @@ const LoginStep = ({ onBack, onSubmit }) => {
           <button type="button" className="back-button" onClick={onBack}>
             Volver
           </button>
-          <button type="submit" className="submit-button">
-            Iniciar Sesión
+          <button type="submit" className="submit-button" disabled={isLoading}>
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
         </div>
       </form>

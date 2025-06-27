@@ -172,3 +172,62 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Estilos para la recomendación de IA */
+.ai-recommendation-section {
+  width: 100%;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  border: 2px solid var(--yellow);
+}
+
+.recommendation-title {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.loading-recommendation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+.error-recommendation {
+  background-color: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #c33;
+}
+
+.recommendation-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  line-height: 1.6;
+}
+
+.recommendation-content p {
+  margin: 0;
+  color: #333;
+  white-space: pre-wrap;
+}
+
+.no-user-recommendation {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  text-align: center;
+}
